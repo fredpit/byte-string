@@ -90,6 +90,11 @@ impl<const N: usize> ByteString<N> {
             self.pos -= 1;
         }
     }
+
+    #[inline]
+    pub fn str(&self) -> &str {
+        self.into()
+    }
 }
 
 
@@ -144,5 +149,6 @@ mod tests {
         assert_eq!(bs.len(), 3);
         bs.from_str("Hello");
         assert_eq!(bs.len(), 5);
+        assert_eq!(bs.str(), "Hello");
     }
 }
