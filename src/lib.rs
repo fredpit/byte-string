@@ -56,7 +56,7 @@ impl<const N: usize>Write for ByteString<N> {
 
 impl<'a, const N: usize>Into<&'a str> for &'a ByteString<N> {
     fn into(self) -> &'a str {
-        unsafe { from_utf8_unchecked(&self.buf[0..self.pos]) }
+        unsafe { from_utf8_unchecked(self.slice()) }
     }
 }
 
