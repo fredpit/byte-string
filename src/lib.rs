@@ -1,3 +1,7 @@
+//! A statically allocated StringBuffer
+//!
+//! Perfect for embedded projects.
+
 use core::fmt::Write;
 use core::convert::Into;
 use core::str::from_utf8_unchecked;
