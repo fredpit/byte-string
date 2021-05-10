@@ -59,6 +59,19 @@ impl<const N: usize> ByteString<N> {
             self.pos += 1;
         }
     }
+
+    pub fn has_byte(&self, b: u8) -> bool {
+        for bb in &self.buf[0..self.pos] {
+            if *bb == b { return true }
+        }
+        false
+    }
+
+    pub fn del_last(&mut self) {
+        if self.pos > 0 {
+            self.pos -= 1;
+        }
+    }
 }
 
 impl<const N: usize>Write for ByteString<N> {
