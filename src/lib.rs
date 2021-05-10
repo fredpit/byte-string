@@ -26,6 +26,11 @@ impl<const N: usize> ByteString<N> {
     }
 
     #[inline]
+    pub fn size(&self) -> usize {
+        self.buf.len()
+    }
+
+    #[inline]
     pub fn is_empty(&self) -> bool {
         self.pos == 0
     }
