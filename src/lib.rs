@@ -1,6 +1,7 @@
 //! A statically allocated StringBuffer
 //!
 //! Perfect for embedded projects.
+#![no_std]
 
 use core::fmt::Write;
 use core::convert::Into;
