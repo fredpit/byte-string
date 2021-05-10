@@ -139,5 +139,10 @@ mod tests {
         assert_eq!(bs.is_empty(), true);
         bs.append('B' as u8);
         assert_eq!(bs.is_empty(), false);
+        bs.clear();
+        bs.append_str("BCD");
+        assert_eq!(bs.len(), 3);
+        bs.from_str("Hello");
+        assert_eq!(bs.len(), 5);
     }
 }
