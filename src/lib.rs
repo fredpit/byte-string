@@ -1,6 +1,24 @@
 //! A statically allocated StringBuffer
 //!
 //! Perfect for embedded projects.
+//! 
+//! # Basic usage :
+//! '''
+//! // A string buffer of 20 bytes.
+//! let mut string_buf = ByteString::<20>::new();
+//! 
+//! // It's writable.
+//! let _ = write!(&mut string_buf, "{} x {} = {}", 2, 3, 2*3);
+//! 
+//! // It can be reuse.
+//! string_buf.clear();
+//! string_buf.from_str("Hello World !!");
+//! 
+//! // It can be converted to ['str']
+//! let my_str = string_buf.str();
+//! let the_str : &str = (&string_buf).into();
+//! '''
+//! 
 #![no_std]
 
 use core::fmt::Write;
@@ -12,7 +30,14 @@ pub struct ByteString<const N: usize> {
     pos:    usize,
 }
 
+/// Methods for ByteString
 impl<const N: usize> ByteString<N> {
+    /// Create a string buffer
+    /// 
+    /// # Example:
+    /// '''
+    /// let mut sb = ByteString::<100>::new();
+    /// '''
     pub fn new() -> Self {
         ByteString {
             buf:    [0u8; N],
@@ -20,31 +45,37 @@ impl<const N: usize> ByteString<N> {
         }
     }
 
+    /// Get the length of the string
     #[inline]
     pub fn len(&self) -> usize {
         self.pos
     }
 
+    /// Get the size of the buffer
     #[inline]
     pub fn size(&self) -> usize {
         self.buf.len()
     }
 
+    /// Test if the string is empty
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.pos == 0
     }
 
+    /// Clear the string
     #[inline]
     pub fn clear(&mut self) {
         self.pos = 0;
     }
 
+    /// Get the slice (&[u8]) containing the string
     #[inline]
     pub fn slice(&self) -> &[u8] {
         &self.buf[0..self.pos]
     }
 
+    /// Get the char at position in the string
     pub fn char_at(&self, pos: usize) -> Option<char> {
         if pos < self.pos {
             Some(self.buf[pos] as char)
@@ -53,6 +84,7 @@ impl<const N: usize> ByteString<N> {
         }
     }
 
+    /// Append a byte to the string
     pub fn append(&mut self, b: u8) {
         if self.pos < self.buf.len() {
             self.buf[self.pos] = b;
@@ -60,15 +92,18 @@ impl<const N: usize> ByteString<N> {
         }
     }
 
+    /// Append a string to the string buffer
     pub fn append_str(&mut self, s: &str) {
         for b in s.bytes() { self.append(b); }
     }
  
+    /// convert string to string buffer
     pub fn from_str(&mut self, s: &str) {
         self.clear();
         self.append_str(s);
     }
 
+    /// Test if string contains a byte
     pub fn has_byte(&self, b: u8) -> bool {
         for bb in &self.buf[0..self.pos] {
             if *bb == b { return true }
@@ -76,12 +111,14 @@ impl<const N: usize> ByteString<N> {
         false
     }
 
+    /// Delete last byte of the string
     pub fn del_last(&mut self) {
         if self.pos > 0 {
             self.pos -= 1;
         }
     }
 
+    /// Remove space at end of the string
     pub fn trim_end(&mut self) {
         while self.pos > 0 {
             if self.buf[self.pos-1] != 0x20u8 {
@@ -91,6 +128,7 @@ impl<const N: usize> ByteString<N> {
         }
     }
 
+    /// Convert string buffer to string
     #[inline]
     pub fn str(&self) -> &str {
         self.into()
