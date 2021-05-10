@@ -40,6 +40,14 @@ impl<const N: usize> ByteString<N> {
         &self.buf[0..self.pos]
     }
 
+    pub fn char_at(&self, pos: usize) -> Option<char> {
+        if pos < self.pos {
+            Some(self.buf[pos] as char)
+        } else {
+            None
+        }
+    }
+
     pub fn append(&mut self, b: u8) {
         if self.pos < self.buf.len() {
             self.buf[self.pos] = b;
