@@ -72,6 +72,15 @@ impl<const N: usize> ByteString<N> {
             self.pos -= 1;
         }
     }
+
+    pub fn trim_end(&mut self) {
+        while self.pos > 0 {
+            if self.buf[self.pos-1] != 0x20u8 {
+                break
+            }
+            self.pos -= 1;
+        }
+    }
 }
 
 impl<const N: usize>Write for ByteString<N> {
