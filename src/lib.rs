@@ -5,18 +5,28 @@
 //! # Basic usage :
 //! '''
 //! // A string buffer of 20 bytes.
+//! 
 //! let mut string_buf = ByteString::<20>::new();
 //! 
+//! 
 //! // It's writable.
+//! 
 //! let _ = write!(&mut string_buf, "{} x {} = {}", 2, 3, 2*3);
 //! 
+//! 
 //! // It can be reuse.
+//! 
 //! string_buf.clear();
+//! 
 //! string_buf.from_str("Hello World !!");
 //! 
+//! 
 //! // It can be converted to ['str']
+//! 
 //! let my_str = string_buf.str();
+//! 
 //! let the_str : &str = (&string_buf).into();
+//! 
 //! '''
 //! 
 #![no_std]
@@ -118,6 +128,16 @@ impl<const N: usize> ByteString<N> {
         }
     }
 
+    /// Delete a byte in the string
+    pub fn del_at(&mut self, at: usize) {
+        if at < self.pos {
+            self.pos -= 1;
+            for ii in at..self.pos {
+                self.buf[ii] = self.buf[ii+1];
+            }
+        }
+    }
+
     /// Remove space at end of the string
     pub fn trim_end(&mut self) {
         while self.pos > 0 {
@@ -188,5 +208,11 @@ mod tests {
         bs.from_str("Hello");
         assert_eq!(bs.len(), 5);
         assert_eq!(bs.str(), "Hello");
+        bs.del_at(1);
+        assert_eq!(bs.str(), "Hllo");
+        bs.del_at(3);
+        assert_eq!(bs.str(), "Hll");
+        bs.del_at(3);
+        assert_eq!(bs.str(), "Hll");
     }
 }
